@@ -60,7 +60,7 @@ $.get("./lib/hebei.json", function (usaJson) {
             aspectScale: 0.75, //长宽比
             zoom: 1,
             roam: true,
-            animationDurationUpdate: 0,
+            animationDurationUpdate: 0, // 快速刷新
             itemStyle: {
                 normal: {
                     areaColor: `#10359b`,
@@ -99,7 +99,7 @@ $.get("./lib/hebei.json", function (usaJson) {
     };
     myChart.setOption(option);
 
-    myChart.on('georoam', params => {
+    myChart.on('georoam', params => { // 拖动函数
         let option = myChart.getOption();
         if (params.zoom) {
             option.geo[0].zoom = option.series[0].zoom;
