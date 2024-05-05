@@ -17,9 +17,10 @@ $.get("/01_map/hebei.json", function (usaJson) {
             triggerOn: 'click',
             showDelay: 0,
             transitionDuration: 0.2,
+            padding: 0,
             formatter: function (params) {
                 console.log(params)
-                var html = `<div style="color: red; font-size: 40px; ">123</div>`
+                var html = `<div style="color: red; font-size: 40px; background: blue; height: 50px; line-height: 50px;">123</div>`
             //     let html = `<div style="height:auto;width: 163px;">
             //     <div style="font-size:14px;font-weight:bold;color:#333;margin-bottom:16px;line-height:1;">
             //       ${params[0].axisValue}
