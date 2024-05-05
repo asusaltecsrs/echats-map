@@ -2,7 +2,7 @@
 var myChart = echarts.init(document.getElementById('main'));
 
 myChart.showLoading();
-$.get("./lib/hebei.json", function (usaJson) {
+$.get("/01_map/hebei.json", function (usaJson) {
     myChart.hideLoading();
     echarts.registerMap('hebei', usaJson);
     option = {

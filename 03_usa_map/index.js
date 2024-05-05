@@ -2,7 +2,7 @@
 var myChart = echarts.init(document.getElementById('main'));
 
 myChart.showLoading();
-$.get("./lib/USA.json", function (usaJson) {
+$.get("/03_usa_map/USA.json", function (usaJson) {
     myChart.hideLoading();
     echarts.registerMap('USA', usaJson);
     option = {
