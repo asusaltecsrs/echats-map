@@ -14,8 +14,41 @@ $.get("/01_map/hebei.json", function (usaJson) {
         },
         tooltip: {
             trigger: 'item',
+            triggerOn: 'click',
             showDelay: 0,
-            transitionDuration: 0.2
+            transitionDuration: 0.2,
+            formatter: function (params) {
+                console.log(params)
+                var html = `<div style="color: red; font-size: 40px; ">123</div>`
+            //     let html = `<div style="height:auto;width: 163px;">
+            //     <div style="font-size:14px;font-weight:bold;color:#333;margin-bottom:16px;line-height:1;">
+            //       ${params[0].axisValue}
+            //     </div>
+            //     ${params
+            //             .map(
+            //                 (
+            //                     item
+            //                 ) => `<div style="font-size:12px;color:#808080;margin-bottom:8px;display:flex;align-items:center;line-height:1;">
+            //           <span style="display:inline-block;margin-right:8px;border-radius:6px;width:6px;height:6px;background-color:${item.color
+            //                     };"></span>
+            //           ${item.seriesName}
+            //           <span style="flex:1;text-align:right;">¥${item.value[
+            //                     item.encode.y[0]
+            //                     ] || 0}</span>
+            //         </div>`
+            //             )
+            //             .join("")}
+            //       <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#333;padding-top:4px;margin-bottom:8px;line-height:1;">
+            //       <span>总计</span>
+            //       <span>¥${R.reduceRight(
+            //                 R.add,
+            //                 0,
+            //                 R.drop(1, params[0].value || [])
+            //             )}</span>
+            //     </div>
+            //   </div>`;
+                return html;
+            },
         },
         visualMap: {
             show: true, // 隐藏
