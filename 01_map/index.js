@@ -51,31 +51,33 @@ $.get("/01_map/hebei.json", function (usaJson) {
                 return html;
             },
         },
-        visualMap: {
-            show: true, // 隐藏
-            left: 'right',
-            min: 500000,
-            max: 38000000,
-            inRange: {
-                color: [ // 由低到高
-                    '#0000ff',
-                    '#ff0000',
-                    // '#313695',
-                    // '#4575b4',
-                    // '#74add1',
-                    // '#abd9e9',
-                    // '#e0f3f8',
-                    // '#ffffbf',
-                    // '#fee090',
-                    // '#fdae61',
-                    // '#f46d43',
-                    // '#d73027',
-                    // '#a50026'
-                ]
-            },
-            text: ['High', 'Low'],
-            calculable: true
-        },
+        visualMap: [
+            {
+                show: true, // 隐藏
+                left: 'right',
+                min: 1000,
+                max: 9000,
+                inRange: {
+                    color: [ // 由低到高
+                        '#0000ff',
+                        '#ff0000',
+                        // '#313695',
+                        // '#4575b4',
+                        // '#74add1',
+                        // '#abd9e9',
+                        // '#e0f3f8',
+                        // '#ffffbf',
+                        // '#fee090',
+                        // '#fdae61',
+                        // '#f46d43',
+                        // '#d73027',
+                        // '#a50026'
+                    ]
+                },
+                text: ['High', 'Low'],
+                calculable: true
+            }
+        ],
         toolbox: {
             show: true,
             //orient: 'vertical',
@@ -126,7 +128,17 @@ $.get("/01_map/hebei.json", function (usaJson) {
                     }
                 },
                 data: [
-                    { name: '石家庄市', value: 4822023 },
+                    { name: '石家庄市', value: 4000 },
+                    { name: '唐山市', value: 5000 },
+                    { name: '秦皇岛市', value: 5000 },
+                    { name: '邯郸市', value: 3000 },
+                    { name: '邢台市', value: 9000 },
+                    { name: '保定市', value: 2000 },
+                    { name: '张家口市', value: 4000 },
+                    { name: '承德市', value: 5000 },
+                    { name: '沧州市', value: 1000 },
+                    { name: '廊坊市', value: 4000 },
+                    { name: '衡水市', value: 1000 },
                 ]
             }
         ]
