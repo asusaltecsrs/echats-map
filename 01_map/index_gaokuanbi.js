@@ -13,6 +13,7 @@ if (!a) {
 }
 console.log('province: ', provinceNames[Number(a)]);
 // $.get("/01_map/province/tianjin.json", function (usaJson) {
+// $.get(`/01_map/province/henan.json`, function (usaJson) {
 $.get(`/01_map/province/${provinceNames[Number(a)]}.json`, function (usaJson) {
 // $.get("/01_map/hebei.json", function (usaJson) {
     myChart.hideLoading();
@@ -63,8 +64,8 @@ $.get(`/01_map/province/${provinceNames[Number(a)]}.json`, function (usaJson) {
             map: 'hebei',
             // center: [105.194115019531, 35.582111640625],
             // center: [116, 39],
-            aspectScale: 0.75, //长宽比
-            zoom: 1,
+            // aspectScale: 0.75, //长宽比
+            // aspectScale: 1,
             roam: true,
             animationDurationUpdate: 0, // 快速刷新
             itemStyle: {
@@ -93,14 +94,15 @@ $.get(`/01_map/province/${provinceNames[Number(a)]}.json`, function (usaJson) {
     let containerH = document.body.clientHeight;
     let containerW = document.body.clientWidth;
     let containerAspectRatio = containerH / containerW;
+    // 流出标签的距离
     let geoPosition = {
-        left: '3%',
-        right: '3%',
+        left: 5,
+        right: 5,
     }
     if (mapAspectRatio >= containerAspectRatio) {
         geoPosition = {
-            top: '3%',
-            bottom: '3%',
+            top: 5,
+            bottom: 5,
         }
     }
     myChart.setOption({
@@ -136,11 +138,17 @@ $.get(`/01_map/province/${provinceNames[Number(a)]}.json`, function (usaJson) {
 // 计算高宽比
 function getMapAspectRatio(js) {
     console.log('json: ', js)
+    let minLeft = 2000;
+    let maxLeft = -2000;
+    let minTop = 2000;
+    let maxTop = -2000;
+
     let minX = 2000;
     let maxX = -2000;
     let minY = 2000;
     let maxY = -2000;
     js.geoJson.features.forEach(featureItem => {
+        let coordinatyCoup = [];
         featureItem.geometry.coordinates.flat(Infinity).forEach((coordinatyItem, index) => {
             if (index % 2 === 0) {
                 minX = Math.min(minX, coordinatyItem);
@@ -152,11 +160,23 @@ function getMapAspectRatio(js) {
                 minY = Math.min(minY, coordinatyItem);
                 maxY = Math.max(maxY, coordinatyItem);
             }
+
+            coordinatyCoup.push(coordinatyItem);
+            if (index % 2 === 1) {
+                let [pageX, pageTop] = myChart.convertToPixel('geo', coordinatyCoup);
+                minLeft = Math.min(minLeft, pageX);
+                maxLeft = Math.max(maxLeft, pageX);
+                minTop = Math.min(minTop, pageTop);
+                maxTop = Math.max(maxTop, pageTop);
+                coordinatyCoup = [];
+            }
         })
     })
 
     let rangeX = maxX - minX;
     let rangeY = maxY - minY;
+    let rangeWidth = maxLeft - minLeft;
+    let rangeHeight = maxTop - minTop;
     // console.log('maxX: ', maxX)
     // console.log('minX: ', minX)
     // console.log('maxY: ', maxY)
@@ -168,6 +188,9 @@ function getMapAspectRatio(js) {
     center = [minX + rangeX / 2, minY + rangeY / 2];
     
     // 高宽比公司计算
-    mapAspectRatio = rangeY / (Math.cos((minY + rangeY / 2) * 2 * Math.PI / 360) * rangeX);
+    // mapAspectRatio = rangeY / (Math.cos((minY + rangeY / 2) * 2 * Math.PI / 360) * rangeX);
+    console.log('rangeHeight: ', rangeHeight)
+    console.log('rangeWidth: ', rangeWidth)
+    mapAspectRatio = rangeHeight / rangeWidth;
     console.log('mapAspectRatio: ', mapAspectRatio)
 }
