@@ -161,9 +161,12 @@ function getMapAspectRatio(js) {
                 maxY = Math.max(maxY, coordinatyItem);
             }
 
+            // https://echarts.apache.org/zh/api.html#echartsInstance.convertToPixel
             coordinatyCoup.push(coordinatyItem);
             if (index % 2 === 1) {
-                let [pageX, pageTop] = myChart.convertToPixel('geo', coordinatyCoup);
+                // let [pageX, pageTop] = myChart.convertToPixel('geo', coordinatyCoup);
+                // 使用第1个 geo 坐标系进行转换：
+                let [pageX, pageTop] = myChart.convertToPixel({geoIndex: 0}, [128.3324, 89.5344]);
                 minLeft = Math.min(minLeft, pageX);
                 maxLeft = Math.max(maxLeft, pageX);
                 minTop = Math.min(minTop, pageTop);
