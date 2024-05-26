@@ -5,6 +5,8 @@ myChart.showLoading();
 $.get("/01_map/hebei.json", function (usaJson) {
     myChart.hideLoading();
     echarts.registerMap('hebei', usaJson);
+    let haha = echarts.getMap('hebei')
+    console.log(haha)
     option = {
         title: {
             text: 'USA Population Estimates (2012)',
@@ -100,9 +102,9 @@ $.get("/01_map/hebei.json", function (usaJson) {
             itemStyle: {
                 normal: {
                     areaColor: `#10359b`,
-                    shadowColor: `#10359b`,
-                    shadowOffsetX: 6,
-                    shadowOffsetY: 6,
+                    // shadowColor: `#10359b`,
+                    // shadowOffsetX: 6,
+                    // shadowOffsetY: 6,
                     borderColor: `#10359b`,
                     // borderWidth: 10,
                     // shadowBlur: 1
