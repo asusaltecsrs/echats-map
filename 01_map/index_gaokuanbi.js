@@ -166,7 +166,7 @@ function getMapAspectRatio(js) {
             if (index % 2 === 1) {
                 // let [pageX, pageTop] = myChart.convertToPixel('geo', coordinatyCoup);
                 // 使用第1个 geo 坐标系进行转换：
-                let [pageX, pageTop] = myChart.convertToPixel({geoIndex: 0}, [128.3324, 89.5344]);
+                let [pageX, pageTop] = myChart.convertToPixel({geoIndex: 0}, coordinatyCoup);
                 minLeft = Math.min(minLeft, pageX);
                 maxLeft = Math.max(maxLeft, pageX);
                 minTop = Math.min(minTop, pageTop);
@@ -192,6 +192,10 @@ function getMapAspectRatio(js) {
     
     // 高宽比公司计算
     // mapAspectRatio = rangeY / (Math.cos((minY + rangeY / 2) * 2 * Math.PI / 360) * rangeX);
+    console.log('minLeft: ', minLeft)
+    console.log('maxLeft: ', maxLeft)
+    console.log('minTop: ', minTop)
+    console.log('maxTop: ', maxTop)
     console.log('rangeHeight: ', rangeHeight)
     console.log('rangeWidth: ', rangeWidth)
     mapAspectRatio = rangeHeight / rangeWidth;
