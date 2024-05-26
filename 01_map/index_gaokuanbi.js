@@ -1,20 +1,23 @@
 // 基于准备好的dom，初始化echarts实例
 var myChart = echarts.init(document.getElementById('main'));
-let center = [];
+let center = [0, 0];
+let mapAspectRatio = 1;
 
 myChart.showLoading();
+let provinceNames = [ 'anhui', 'aomen', 'beijing', 'chongqing', 'fujian', 'gansu', 'guangdong', 'guangxi', 'guizhou', 'hainan', 'hebei', 'heilongjiang', 'henan', 'hubei', 'hunan', 'jiangsu', 'jiangxi', 'jilin', 'liaoning', 'neimenggu', 'ningxia', 'qinghai', 'shandong', 'shanghai', 'shanxi', 'shanxi1', 'sichuan', 'taiwan', 'tianjin', 'xianggang', 'xinjiang', 'xizang', 'yunnan', 'zhejiang'];
+let a = localStorage.getItem('a');
+if (!a) {
+    localStorage.setItem('a', '0');
+} else {
+    localStorage.setItem('a', String(Number(a) + 1)); 
+}
+console.log('province: ', provinceNames[Number(a)]);
 // $.get("/01_map/province/tianjin.json", function (usaJson) {
-$.get("/01_map/province/henan.json", function (usaJson) {
+$.get(`/01_map/province/${provinceNames[Number(a)]}.json`, function (usaJson) {
 // $.get("/01_map/hebei.json", function (usaJson) {
     myChart.hideLoading();
     echarts.registerMap('hebei', usaJson);
     option = {
-        title: {
-            text: 'USA Population Estimates (2012)',
-            subtext: 'Data from www.census.gov',
-            sublink: 'https://www.baidu.com',
-            left: 'right'
-        },
         tooltip: {
             trigger: 'item',
             triggerOn: 'click',
@@ -54,44 +57,6 @@ $.get("/01_map/province/henan.json", function (usaJson) {
                 return html;
             },
         },
-        visualMap: [
-            {
-                show: true, // 隐藏
-                left: 'right',
-                min: 1000,
-                max: 9000,
-                inRange: {
-                    color: [ // 由低到高
-                        '#0000ff',
-                        '#ff0000',
-                        // '#313695',
-                        // '#4575b4',
-                        // '#74add1',
-                        // '#abd9e9',
-                        // '#e0f3f8',
-                        // '#ffffbf',
-                        // '#fee090',
-                        // '#fdae61',
-                        // '#f46d43',
-                        // '#d73027',
-                        // '#a50026'
-                    ]
-                },
-                text: ['High', 'Low'],
-                calculable: true
-            }
-        ],
-        toolbox: {
-            show: true,
-            //orient: 'vertical',
-            left: 'left',
-            top: 'top',
-            feature: {
-                dataView: { readOnly: false },
-                restore: {},
-                saveAsImage: {}
-            }
-        },
         geo: [{
             // top: 0,
             // bottom: 0,
@@ -119,46 +84,33 @@ $.get("/01_map/province/henan.json", function (usaJson) {
                 }
             }
         }],
-        series: [
-            {
-                name: '人口', // tooltip标题
-                type: 'map',
-                roam: true,
-                map: 'hebei',
-                // center: [105.194115019531, 35.582111640625],
-                // center: [116, 39],
-                emphasis: {
-                    label: {
-                        show: true
-                    }
-                },
-                data: [
-                    { name: '石家庄市', value: 4000 },
-                    { name: '唐山市', value: 5000 },
-                    { name: '秦皇岛市', value: 5000 },
-                    { name: '邯郸市', value: 3000 },
-                    { name: '邢台市', value: 9000 },
-                    { name: '保定市', value: 2000 },
-                    { name: '张家口市', value: 4000 },
-                    { name: '承德市', value: 5000 },
-                    { name: '沧州市', value: 1000 },
-                    { name: '廊坊市', value: 4000 },
-                    { name: '衡水市', value: 1000 },
-                ]
-            }
-        ]
+        series: []
     };
     myChart.setOption(option);
     let haha = echarts.getMap('hebei')
     getMapAspectRatio(haha);
-    // myChart.setOption({
-    //     geo: [
-    //         {
-    //             top: 0,
-    //             bottom: 0
-    //         },
-    //     ]
-    // })
+
+    let containerH = document.body.clientHeight;
+    let containerW = document.body.clientWidth;
+    let containerAspectRatio = containerH / containerW;
+    let geoPosition = {
+        left: '3%',
+        right: '3%',
+    }
+    if (mapAspectRatio >= containerAspectRatio) {
+        geoPosition = {
+            top: '3%',
+            bottom: '3%',
+        }
+    }
+    myChart.setOption({
+        geo: [
+            {
+                ...geoPosition,
+                center
+            },
+        ]
+    })
 
     myChart.on('georoam', params => { // 拖动函数
         let option = myChart.getOption();
@@ -173,6 +125,10 @@ $.get("/01_map/province/henan.json", function (usaJson) {
     myChart.on('click', function(params) {
         console.log(params)
         // 可以看到数据和位置
+    })
+
+    window.addEventListener('resize', () => {
+        myChart.resize();
     })
 });
 
@@ -201,17 +157,17 @@ function getMapAspectRatio(js) {
 
     let rangeX = maxX - minX;
     let rangeY = maxY - minY;
-    console.log('maxX: ', maxX)
-    console.log('minX: ', minX)
-    console.log('maxY: ', maxY)
-    console.log('minY: ', minY)
-    console.log('rangeX: ', rangeX)
-    console.log('rangeY: ', rangeY)
-    console.log('center X: ', rangeX / 2)
-    console.log('center Y: ', rangeY / 2)
+    // console.log('maxX: ', maxX)
+    // console.log('minX: ', minX)
+    // console.log('maxY: ', maxY)
+    // console.log('minY: ', minY)
+    // console.log('rangeX: ', rangeX)
+    // console.log('rangeY: ', rangeY)
+    // console.log('center X: ', rangeX / 2)
+    // console.log('center Y: ', rangeY / 2)
     center = [minX + rangeX / 2, minY + rangeY / 2];
-
+    
     // 高宽比公司计算
-    let ratio = rangeY / (Math.cos((minY + rangeY / 2) * 2 * Math.PI / 360) * rangeX);
-    console.log('ratio: ', ratio)
+    mapAspectRatio = rangeY / (Math.cos((minY + rangeY / 2) * 2 * Math.PI / 360) * rangeX);
+    console.log('mapAspectRatio: ', mapAspectRatio)
 }
